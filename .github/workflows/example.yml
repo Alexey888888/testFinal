@@ -1,0 +1,38 @@
+name: Example Workflow
+
+on:
+  push:
+    branches:
+      - main # Запускать действие при push в ветку main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2 # Действие для клонирования репозитория
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2 # Действие для установки Node.js
+
+      - name: Install dependencies
+        run: npm install # Установка зависимостей
+
+      - name: Run tests
+        run: npm test # Запуск тестов
+
+      - name: Build
+        run: npm run build # Сборка проекта
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: path/to/artifact # Путь к созданному артефакту
+
+      - name: Deploy to production
+        if: success() # Выполнение только в случае успешного прохождения предыдущих шагов
+        run: |
+          echo "Deploying to production..."
+          # команды для деплоя
